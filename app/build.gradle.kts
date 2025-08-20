@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
 
     id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -53,16 +53,16 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //Data store
-    implementation ("androidx.datastore:datastore-preferences:1.1.1")
+    implementation ("androidx.datastore:datastore-preferences:1.1.7")
 
     // Room and Architectural Components
-    implementation("androidx.room:room-runtime:2.7.0-alpha01")
-    implementation("androidx.room:room-ktx:2.7.0-alpha01")
-    kapt("androidx.room:room-compiler:2.7.0-alpha01")
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
+    ksp("androidx.room:room-compiler:2.7.2")
 
     //Lifecycle viewmodel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.4")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.2")
 
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
@@ -74,7 +74,7 @@ dependencies {
 
     //Hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+    ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
-    kapt("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
+    ksp("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
 }
