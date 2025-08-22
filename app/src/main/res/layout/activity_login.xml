@@ -2,21 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="24dp"
-    android:id="@+id/main"
+    android:id="@+id/login_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <TextView
+    <EditText
+        android:id="@+id/etUsername"
+        android:hint="@string/username"
+        android:inputType="text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:hint="@string/password"
+        android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/tvUsername"
-        android:gravity="center"
-        android:text="@string/hi"/>
+        android:layout_marginTop="12dp"/>
 
     <Button
-        android:id="@+id/btnLogout"
-        android:text="@string/logout"
+        android:id="@+id/btnLogin"
+        android:text="@string/login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"/>

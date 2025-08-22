@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.annotation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,6 +76,9 @@ dependencies {
     //Hilt
     implementation("com.google.dagger:hilt-android:2.56.2")
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
+
+    //Splash screen
+    implementation("androidx.core:core-splashscreen:1.0.0")
 
     ksp("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
 }
