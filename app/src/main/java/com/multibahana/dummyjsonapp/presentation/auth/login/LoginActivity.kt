@@ -11,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.databinding.ActivityLoginBinding
+import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
 import com.multibahana.dummyjsonapp.presentation.home.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: AuthViewModel by viewModels()
 
     private lateinit var binding: ActivityLoginBinding
 

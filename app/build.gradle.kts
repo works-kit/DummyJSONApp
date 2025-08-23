@@ -80,5 +80,8 @@ dependencies {
     //Splash screen
     implementation("androidx.core:core-splashscreen:1.0.0")
 
+    //Glide
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
+
     ksp("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
 }

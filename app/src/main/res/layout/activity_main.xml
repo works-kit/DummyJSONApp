@@ -7,12 +7,27 @@
     android:layout_height="match_parent"
     android:gravity="center">
 
+    <ImageView
+        android:id="@+id/imageAvatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/avatar"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground" />
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tvUsername"
-        android:gravity="center"
-        android:text="@string/hi"/>
+        android:gravity="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvEmail"
+        android:gravity="center"/>
 
     <Button
         android:id="@+id/btnLogout"
@@ -21,7 +36,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"/>
 
-    <!-- Optional: Loading indicator -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:visibility="gone"

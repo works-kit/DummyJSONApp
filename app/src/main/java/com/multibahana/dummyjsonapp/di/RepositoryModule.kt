@@ -1,10 +1,11 @@
 package com.multibahana.dummyjsonapp.di
 
 // di/RepositoryModule.kt
+import com.multibahana.dummyjsonapp.data.local.DataStoreManager
 import com.multibahana.dummyjsonapp.data.remote.api.AuthService
 import com.multibahana.dummyjsonapp.data.repository.AuthRepositoryImpl
 import com.multibahana.dummyjsonapp.domain.repository.AuthRepository
-import com.multibahana.dummyjsonapp.domain.usecase.LoginUseCase
+import com.multibahana.dummyjsonapp.domain.usecase.AuthUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,10 +18,10 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(api: AuthService): AuthRepository =
-        AuthRepositoryImpl(api)
+    fun provideAuthRepository(api: AuthService, dataStoreManager: DataStoreManager): AuthRepository =
+        AuthRepositoryImpl(api, dataStoreManager)
 
     @Provides
-    fun provideLoginUseCase(repo: AuthRepository): LoginUseCase =
-        LoginUseCase(repo)
+    fun provideAuthUseCase(repo: AuthRepository): AuthUseCase =
+        AuthUseCase(repo)
 }
