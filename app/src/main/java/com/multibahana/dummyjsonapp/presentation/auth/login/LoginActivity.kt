@@ -8,11 +8,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.databinding.ActivityLoginBinding
 import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
-import com.multibahana.dummyjsonapp.presentation.home.MainActivity
+import com.multibahana.dummyjsonapp.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,18 +38,24 @@ class LoginActivity : AppCompatActivity() {
         }
 
         lifecycleScope.launch {
-            viewModel.accessToken.collectLatest { state ->
-                if (!state.isNullOrEmpty()) {
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    })
-//                    finish()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ✅ hanya aktif saat activity terlihat
+                launch {
+                    viewModel.accessToken.collectLatest { token ->
+                        if (!token.isNullOrEmpty()) {
+                            startActivity(Intent(this@LoginActivity, MainActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            })
+                        }
+                    }
                 }
-            }
 
-            viewModel.state.collectLatest { state ->
-                state.error?.let {
-                    Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
+                launch {
+                    viewModel.state.collectLatest { state ->
+                        state.error?.let {
+                            Toast.makeText(this@LoginActivity, it, Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }

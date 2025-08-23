@@ -10,11 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
 import com.multibahana.dummyjsonapp.presentation.auth.login.LoginActivity
-import com.multibahana.dummyjsonapp.presentation.home.MainActivity
+import com.multibahana.dummyjsonapp.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -48,15 +50,17 @@ class SplashScreen : AppCompatActivity() {
         )
 
         lifecycleScope.launch {
-            viewModel.accessToken.collectLatest { token ->
-                if (token.isNullOrEmpty()) {
-                    startActivity(Intent(this@SplashScreen, LoginActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    })
-                } else {
-                    startActivity(Intent(this@SplashScreen, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    })
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.accessToken.collectLatest { token ->
+                    if (token.isNullOrEmpty()) {
+                        startActivity(Intent(this@SplashScreen, LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                    } else {
+                        startActivity(Intent(this@SplashScreen, MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        })
+                    }
                 }
             }
         }

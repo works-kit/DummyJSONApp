@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_menu_home"
+        android:enabled="true"
+        android:icon="@drawable/home_24px"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/item_menu_posts"
+        android:enabled="true"
+        android:icon="@drawable/checkbook_24px"
+        android:title="Posts"/>
+
+    <item
+        android:id="@+id/item_menu_explores"
+        android:enabled="true"
+        android:icon="@drawable/explore_24px"
+        android:title="Explore"/>
+
+    <item
+        android:id="@+id/item_menu_comments"
+        android:enabled="true"
+        android:icon="@drawable/comment_24px"
+        android:title="Comments"/>
+
+    <item
+        android:id="@+id/item_menu_user"
+        android:enabled="true"
+        android:icon="@drawable/account_circle_24px"
+        android:title="Profile"/>
+</menu>
