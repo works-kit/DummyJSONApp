@@ -10,10 +10,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
-import androidx.navigation.ui.setupWithNavController
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.databinding.ActivityMainBinding
 import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
@@ -59,22 +57,27 @@ class MainActivity : AppCompatActivity() {
                     navigateSingleTop(R.id.item_menu_home)
                     true
                 }
+
                 R.id.item_menu_posts -> {
                     navigateSingleTop(R.id.item_menu_posts)
                     true
                 }
+
                 R.id.item_menu_explores -> {
                     navigateSingleTop(R.id.item_menu_explores)
                     true
                 }
+
                 R.id.item_menu_comments -> {
                     navigateSingleTop(R.id.item_menu_comments)
                     true
                 }
+
                 R.id.item_menu_user -> {
                     navigateSingleTop(R.id.item_menu_user)
                     true
                 }
+
                 else -> false
             }
         }
@@ -82,11 +85,20 @@ class MainActivity : AppCompatActivity() {
         // Sinkronisasi bottom nav saat backstack berubah
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.item_menu_home -> binding.bottomNavigation.menu.findItem(R.id.item_menu_home).isChecked = true
-                R.id.item_menu_posts -> binding.bottomNavigation.menu.findItem(R.id.item_menu_posts).isChecked = true
-                R.id.item_menu_explores -> binding.bottomNavigation.menu.findItem(R.id.item_menu_explores).isChecked = true
-                R.id.item_menu_comments -> binding.bottomNavigation.menu.findItem(R.id.item_menu_comments).isChecked = true
-                R.id.item_menu_user -> binding.bottomNavigation.menu.findItem(R.id.item_menu_user).isChecked = true
+                R.id.item_menu_home -> binding.bottomNavigation.menu.findItem(R.id.item_menu_home).isChecked =
+                    true
+
+                R.id.item_menu_posts -> binding.bottomNavigation.menu.findItem(R.id.item_menu_posts).isChecked =
+                    true
+
+                R.id.item_menu_explores -> binding.bottomNavigation.menu.findItem(R.id.item_menu_explores).isChecked =
+                    true
+
+                R.id.item_menu_comments -> binding.bottomNavigation.menu.findItem(R.id.item_menu_comments).isChecked =
+                    true
+
+                R.id.item_menu_user -> binding.bottomNavigation.menu.findItem(R.id.item_menu_user).isChecked =
+                    true
             }
         }
     }
