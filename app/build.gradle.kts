@@ -78,17 +78,17 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.56.2")
 
     //Splash screen
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     //Glide
-    implementation ("com.github.bumptech.glide:glide:4.14.2")
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
     //ktx
-    implementation ("androidx.fragment:fragment-ktx:1.8.2")
-    implementation ("androidx.activity:activity-ktx:1.9.2")
+    implementation ("androidx.fragment:fragment-ktx:1.8.9")
+    implementation ("androidx.activity:activity-ktx:1.10.1")
 
     //navigation-fragment
-    val nav_version = "2.7.7" // versi terbaru stabil per Agustus 2025
+    val nav_version = "2.9.3" // versi terbaru stabil per Agustus 2025
     implementation ("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation ("androidx.navigation:navigation-ui-ktx:$nav_version")
 
