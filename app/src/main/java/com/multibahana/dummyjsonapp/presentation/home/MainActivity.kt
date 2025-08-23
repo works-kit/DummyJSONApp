@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.databinding.ActivityMainBinding
-import com.multibahana.dummyjsonapp.presentation.auth.login.LoginActivity
 import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
+import com.multibahana.dummyjsonapp.presentation.auth.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,14 +51,16 @@ class MainActivity : AppCompatActivity() {
                         binding.tvUsername.text = "Loading..."
                         binding.tvEmail.text = "Loading..."
                     }
+
                     state.user != null -> {
                         binding.tvUsername.text = "Hi, ${state.user.getOrNull()?.username}"
                         binding.tvEmail.text = "${state.user.getOrNull()?.email}"
                         Glide.with(this@MainActivity)
-                            .load(state.user?.getOrNull()?.image)
+                            .load(state.user.getOrNull()?.image)
                             .placeholder(R.drawable.ic_launcher_foreground)
                             .into(binding.imageAvatar)
                     }
+
                     state.error != null -> {
                         binding.tvUsername.text = "Error: ${state.error}"
                     }

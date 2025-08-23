@@ -28,9 +28,6 @@ class AuthViewModel @Inject constructor(
     val accessToken: StateFlow<String?> = dataStoreManager.accessToken
         .stateIn(viewModelScope, SharingStarted.Companion.Lazily, null)
 
-    val refreshToken: StateFlow<String?> = dataStoreManager.refreshToken
-        .stateIn(viewModelScope, SharingStarted.Companion.Lazily, null)
-
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _state.value = LoginState(isLoading = true)
@@ -51,14 +48,15 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun getMe(token : String) {
+    fun getMe(token: String) {
         viewModelScope.launch {
             _currentUserState.value = UserCurrentState(isLoading = true)
             try {
                 val result = authUseCase(token) // ini Result<UserEntity>
                 val user = result.getOrNull()
                 user?.let {
-                    _currentUserState.value = UserCurrentState(user = result, isLoading = false, isLogout = false)
+                    _currentUserState.value =
+                        UserCurrentState(user = result, isLoading = false, isLogout = false)
                 }
 
             } catch (e: Exception) {
