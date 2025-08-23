@@ -6,28 +6,26 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
+import androidx.navigation.ui.setupWithNavController
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.databinding.ActivityMainBinding
 import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
-import com.multibahana.dummyjsonapp.presentation.comments.CommentsFragment
-import com.multibahana.dummyjsonapp.presentation.explores.ExploresFragment
-import com.multibahana.dummyjsonapp.presentation.home.HomeFragment
-import com.multibahana.dummyjsonapp.presentation.posts.PostsFragment
-import com.multibahana.dummyjsonapp.presentation.profile.ProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val authViewModel: AuthViewModel by viewModels()
-
-    private var selectedItemId by Delegates.notNull<Int>()
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,14 +40,55 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        selectedItemId = savedInstanceState?.getInt("selectedItemId") ?: R.id.item_menu_home
-
         observeViewModel()
+        observeNavigation()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("selectedItemId", selectedItemId)
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    private fun observeNavigation() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.item_menu_home -> {
+                    navigateSingleTop(R.id.item_menu_home)
+                    true
+                }
+                R.id.item_menu_posts -> {
+                    navigateSingleTop(R.id.item_menu_posts)
+                    true
+                }
+                R.id.item_menu_explores -> {
+                    navigateSingleTop(R.id.item_menu_explores)
+                    true
+                }
+                R.id.item_menu_comments -> {
+                    navigateSingleTop(R.id.item_menu_comments)
+                    true
+                }
+                R.id.item_menu_user -> {
+                    navigateSingleTop(R.id.item_menu_user)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // Sinkronisasi bottom nav saat backstack berubah
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.item_menu_home -> binding.bottomNavigation.menu.findItem(R.id.item_menu_home).isChecked = true
+                R.id.item_menu_posts -> binding.bottomNavigation.menu.findItem(R.id.item_menu_posts).isChecked = true
+                R.id.item_menu_explores -> binding.bottomNavigation.menu.findItem(R.id.item_menu_explores).isChecked = true
+                R.id.item_menu_comments -> binding.bottomNavigation.menu.findItem(R.id.item_menu_comments).isChecked = true
+                R.id.item_menu_user -> binding.bottomNavigation.menu.findItem(R.id.item_menu_user).isChecked = true
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -63,12 +102,17 @@ class MainActivity : AppCompatActivity() {
                 launch {
                     authViewModel.currentUserState.collectLatest { state ->
                         when {
-                            state.isLoading -> { /* tampilkan loading */ }
-                            state.user != null -> {
-                                showFragment(selectedItemId)
-                                setupBottomNavigation()
+                            state.isLoading -> {
+                                // tampilkan loading UI
                             }
-                            state.error != null -> { /* tampilkan error */ }
+
+                            state.user != null -> {
+                                // user berhasil login -> biarkan nav graph handle fragment
+                            }
+
+                            state.error != null -> {
+                                // tampilkan error
+                            }
                         }
                     }
                 }
@@ -76,29 +120,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBottomNavigation() {
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            if (selectedItemId != item.itemId) {
-                selectedItemId = item.itemId
-                showFragment(item.itemId)
-            }
-            true
-        }
-        binding.bottomNavigation.selectedItemId = selectedItemId
-    }
-
-    private fun showFragment(itemId: Int) {
-        val fragment = when (itemId) {
-            R.id.item_menu_home -> HomeFragment()
-            R.id.item_menu_posts -> PostsFragment()
-            R.id.item_menu_explores -> ExploresFragment()
-            R.id.item_menu_comments -> CommentsFragment()
-            R.id.item_menu_user -> ProfileFragment()
-            else -> HomeFragment()
-        }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
+    private fun navigateSingleTop(destinationId: Int) {
+        navController.navigate(destinationId, null, navOptions {
+            launchSingleTop = true
+            restoreState = true
+        })
     }
 }
-
