@@ -87,5 +87,10 @@ dependencies {
     implementation ("androidx.fragment:fragment-ktx:1.8.2")
     implementation ("androidx.activity:activity-ktx:1.9.2")
 
+    //navigation-fragment
+    val nav_version = "2.7.7" // versi terbaru stabil per Agustus 2025
+    implementation ("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation ("androidx.navigation:navigation-ui-ktx:$nav_version")
+
     ksp("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
 }

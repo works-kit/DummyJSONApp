@@ -21,15 +21,13 @@ import com.multibahana.dummyjsonapp.presentation.profile.ProfileFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-
+import kotlin.properties.Delegates
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     private val authViewModel: AuthViewModel by viewModels()
 
-    private var selectedItemId = R.id.item_menu_home
-
+    private var selectedItemId by Delegates.notNull<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +42,17 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        observeViewModel(savedInstanceState)
+        selectedItemId = savedInstanceState?.getInt("selectedItemId") ?: R.id.item_menu_home
+
+        observeViewModel()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("selectedItemId", selectedItemId)
+    }
 
-
-    private fun observeViewModel(savedInstanceState: Bundle?) {
+    private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -62,9 +65,7 @@ class MainActivity : AppCompatActivity() {
                         when {
                             state.isLoading -> { /* tampilkan loading */ }
                             state.user != null -> {
-                                if (savedInstanceState == null) {
-                                    replaceFragment(HomeFragment())
-                                }
+                                showFragment(selectedItemId)
                                 setupBottomNavigation()
                             }
                             state.error != null -> { /* tampilkan error */ }
@@ -75,27 +76,29 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun setupBottomNavigation() {
         binding.bottomNavigation.setOnItemSelectedListener { item ->
             if (selectedItemId != item.itemId) {
                 selectedItemId = item.itemId
-                when (item.itemId) {
-                    R.id.item_menu_home -> replaceFragment(HomeFragment())
-                    R.id.item_menu_posts -> replaceFragment(PostsFragment())
-                    R.id.item_menu_explores -> replaceFragment(ExploresFragment())
-                    R.id.item_menu_comments -> replaceFragment(CommentsFragment())
-                    R.id.item_menu_user -> replaceFragment(ProfileFragment())
-                }
+                showFragment(item.itemId)
             }
             true
         }
+        binding.bottomNavigation.selectedItemId = selectedItemId
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun showFragment(itemId: Int) {
+        val fragment = when (itemId) {
+            R.id.item_menu_home -> HomeFragment()
+            R.id.item_menu_posts -> PostsFragment()
+            R.id.item_menu_explores -> ExploresFragment()
+            R.id.item_menu_comments -> CommentsFragment()
+            R.id.item_menu_user -> ProfileFragment()
+            else -> HomeFragment()
+        }
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
 }
+
