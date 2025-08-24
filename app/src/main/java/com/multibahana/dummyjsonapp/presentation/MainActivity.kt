@@ -1,6 +1,8 @@
 package com.multibahana.dummyjsonapp.presentation
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,18 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        onBackPressedDispatcher.addCallback(
+            this@MainActivity,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (navController.currentDestination?.id == R.id.item_menu_home) {
+                        finish()
+                    } else {
+                        navController.navigateUp()
+                    }
+                }
+            }
+        )
         observeViewModel()
         observeNavigation()
     }
@@ -136,6 +150,10 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(destinationId, null, navOptions {
             launchSingleTop = true
             restoreState = true
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
         })
     }
+
 }

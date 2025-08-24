@@ -39,15 +39,15 @@ class SplashScreen : AppCompatActivity() {
 
         splashScreen.setKeepOnScreenCondition { true }
 
-        val content: View = findViewById(android.R.id.content)
-        content.viewTreeObserver.addOnPreDrawListener(
-            object : ViewTreeObserver.OnPreDrawListener {
-                override fun onPreDraw(): Boolean {
-                    content.viewTreeObserver.removeOnPreDrawListener(this)
-                    return true
-                }
-            }
-        )
+//        val content: View = findViewById(android.R.id.content)
+//        content.viewTreeObserver.addOnPreDrawListener(
+//            object : ViewTreeObserver.OnPreDrawListener {
+//                override fun onPreDraw(): Boolean {
+//                    content.viewTreeObserver.removeOnPreDrawListener(this)
+//                    return true
+//                }
+//            }
+//        )
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

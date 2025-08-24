@@ -9,14 +9,16 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 
-
 data class LoginRequest(
     val username: String,
     val password: String,
     val expiresInMins: Int = 30
 )
 
-data class RefreshTokenRequest(val refreshToken: String?, val expiresInMins : Int = 60 * 24)
+data class RefreshTokenRequest(
+    val refreshToken: String?,
+    val expiresInMins: Int = 60 * 24
+)
 
 data class TokenResponse(
     val accessToken: String,

@@ -2,6 +2,7 @@ package com.multibahana.dummyjsonapp.di
 
 // di/NetworkModule.kt
 import com.multibahana.dummyjsonapp.data.remote.api.AuthService
+import com.multibahana.dummyjsonapp.data.remote.api.ProductService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +26,9 @@ object NetworkModule {
     @Singleton
     fun provideAuthService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideProductService(retrofit: Retrofit): ProductService =
+        retrofit.create(ProductService::class.java)
 }
