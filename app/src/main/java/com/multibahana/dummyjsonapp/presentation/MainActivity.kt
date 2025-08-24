@@ -2,7 +2,6 @@ package com.multibahana.dummyjsonapp.presentation
 
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity

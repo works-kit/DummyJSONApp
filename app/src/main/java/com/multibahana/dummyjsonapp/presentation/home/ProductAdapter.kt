@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.multibahana.dummyjsonapp.R
-import com.multibahana.dummyjsonapp.data.model.ProductDto
 import com.multibahana.dummyjsonapp.data.remote.api.ProductResponse
 import com.multibahana.dummyjsonapp.databinding.RvProductItenBinding
 
@@ -39,7 +38,6 @@ class ProductAdapter(private val productList: ProductResponse) :
                 .into(ivThumbnail)
         }
     }
-
 
 
     override fun getItemCount(): Int = productList.products.size

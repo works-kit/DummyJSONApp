@@ -1,12 +1,8 @@
 package com.multibahana.dummyjsonapp.presentation.home
 
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import com.multibahana.dummyjsonapp.domain.usecase.ProductUseCase
-import com.multibahana.dummyjsonapp.presentation.auth.login.LoginState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +28,7 @@ class ProductViewModel @Inject constructor(
         order: String? = null
     ) {
 
-         viewModelScope.launch {
+        viewModelScope.launch {
             _productListState.value = ProductListState(isLoading = true)
 
             try {

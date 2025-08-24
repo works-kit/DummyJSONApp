@@ -2,8 +2,6 @@ package com.multibahana.dummyjsonapp.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +14,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.presentation.auth.AuthViewModel
 import com.multibahana.dummyjsonapp.presentation.auth.login.LoginActivity
-import com.multibahana.dummyjsonapp.presentation.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
