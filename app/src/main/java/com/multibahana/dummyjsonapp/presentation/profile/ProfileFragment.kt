@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -32,7 +33,7 @@ private const val ARG_PARAM2 = "param2"
  */
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
-    private val authViewModel: AuthViewModel by activityViewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -60,53 +61,57 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Adapter, UI binding, button listener
+        binding.btnLogout.setOnClickListener { authViewModel.logout() }
+
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.currentUserState.collectLatest { state ->
-                    when {
-                        state.isLoading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                            binding.linearLayoutContainer.visibility = View.GONE
-                        }
-                        state.user != null -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.linearLayoutContainer.visibility = View.VISIBLE
+                // 1. Access token
+                launch {
+                    authViewModel.accessToken.collectLatest { token ->
+                        token?.let { authViewModel.getMe(it) }
+                    }
+                }
+                launch {
+                    authViewModel.currentUserState.collectLatest { state ->
+                        when {
+                            state.isLoading -> {
+                                binding.progressBar.visibility = View.VISIBLE
+                                binding.linearLayoutContainer.visibility = View.GONE
+                            }
+                            state.user != null -> {
+                                binding.progressBar.visibility = View.GONE
+                                binding.linearLayoutContainer.visibility = View.VISIBLE
 
-                            binding.tvUsername.text = "Hi, ${state.user.getOrNull()?.username}"
-                            binding.tvEmail.text = "${state.user.getOrNull()?.email}"
-                            Glide.with(this@ProfileFragment)
-                                .load(state.user.getOrNull()?.image)
-                                .placeholder(R.drawable.ic_launcher_foreground)
-                                .into(binding.imageAvatar)
-                        }
-                        state.error != null -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.linearLayoutContainer.visibility = View.VISIBLE
+                                binding.tvUsername.text = "Hi, ${state.user.getOrNull()?.username}"
+                                binding.tvEmail.text = "${state.user.getOrNull()?.email}"
+                                Glide.with(this@ProfileFragment)
+                                    .load(state.user.getOrNull()?.image)
+                                    .placeholder(R.drawable.ic_launcher_foreground)
+                                    .into(binding.imageAvatar)
+                            }
+                            state.error != null -> {
+                                binding.progressBar.visibility = View.GONE
+                                binding.linearLayoutContainer.visibility = View.VISIBLE
 
-                            binding.tvUsername.text = "Error: ${state.error}"
+                                binding.tvUsername.text = "Error: ${state.error}"
+                            }
+                        }
+                    }
+                }
+
+                launch {
+                    authViewModel.state.collect { state ->
+                        if (state.isLogout) {
+                            startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            })
                         }
                     }
                 }
             }
         }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                authViewModel.state.collect { state ->
-                    if (state.isLogout) {
-                        val intent = Intent(requireContext(), LoginActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }
-                        startActivity(intent)
-                    }
-                }
-            }
-        }
-
-        binding.btnLogout.setOnClickListener {
-            authViewModel.logout()
-        }
-
     }
 
     override fun onDestroyView() {

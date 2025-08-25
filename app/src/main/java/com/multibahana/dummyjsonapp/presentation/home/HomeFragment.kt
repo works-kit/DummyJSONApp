@@ -9,12 +9,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.multibahana.dummyjsonapp.R
+import com.multibahana.dummyjsonapp.data.remote.api.ProductResponse
 import com.multibahana.dummyjsonapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -50,6 +52,9 @@ class HomeFragment : Fragment() {
         val searchBar = view.findViewById<AppCompatEditText>(R.id.searchBar)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
 
+        val adapter = ProductAdapter(productList = ProductResponse(products = emptyList()))
+        recyclerView.adapter = adapter
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 productViewModel.productListState.collectLatest { state ->
@@ -65,22 +70,18 @@ class HomeFragment : Fragment() {
                     if (state.productList?.products?.isNotEmpty() == true) {
                         binding.recyclerView.visibility = View.VISIBLE
                         binding.progressBar.visibility = View.GONE
+                        adapter.updateData(state.productList)
 
-                        val adapter = ProductAdapter(productList = state.productList)
-                        recyclerView.adapter = adapter
                     }
                 }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                productViewModel.getProducts(
-                    limit = 20,
-                    skip = 0,
-                )
-            }
-        }
+        productViewModel.getProducts(
+            limit = 20,
+            skip = 0,
+        )
+
 
         // Fokus searchBar hilang saat scroll RecyclerView
         recyclerView.setOnTouchListener { v, _ ->

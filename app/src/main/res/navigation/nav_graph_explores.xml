@@ -1,0 +1,12 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_explores"
+    app:startDestination="@id/exploresFragment">
+
+    <fragment
+        android:id="@+id/exploresFragment"
+        android:name="com.multibahana.dummyjsonapp.presentation.explores.ExploresFragment"
+        tools:layout="@layout/fragment_explores"
+        android:label="Explores"/>
+</navigation>

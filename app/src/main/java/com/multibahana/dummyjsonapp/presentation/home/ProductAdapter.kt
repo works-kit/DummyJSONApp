@@ -8,7 +8,7 @@ import com.multibahana.dummyjsonapp.R
 import com.multibahana.dummyjsonapp.data.remote.api.ProductResponse
 import com.multibahana.dummyjsonapp.databinding.RvProductItenBinding
 
-class ProductAdapter(private val productList: ProductResponse) :
+class ProductAdapter(private var productList: ProductResponse) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,4 +44,9 @@ class ProductAdapter(private val productList: ProductResponse) :
 
     inner class ProductViewHolder(val binding: RvProductItenBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    fun updateData(products: ProductResponse) {
+        productList = products
+        notifyDataSetChanged()
+    }
 }
