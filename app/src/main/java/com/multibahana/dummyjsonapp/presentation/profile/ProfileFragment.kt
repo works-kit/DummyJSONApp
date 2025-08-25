@@ -2,11 +2,10 @@ package com.multibahana.dummyjsonapp.presentation.profile
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -80,6 +79,7 @@ class ProfileFragment : Fragment() {
                                 binding.progressBar.visibility = View.VISIBLE
                                 binding.linearLayoutContainer.visibility = View.GONE
                             }
+
                             state.user != null -> {
                                 binding.progressBar.visibility = View.GONE
                                 binding.linearLayoutContainer.visibility = View.VISIBLE
@@ -91,6 +91,7 @@ class ProfileFragment : Fragment() {
                                     .placeholder(R.drawable.ic_launcher_foreground)
                                     .into(binding.imageAvatar)
                             }
+
                             state.error != null -> {
                                 binding.progressBar.visibility = View.GONE
                                 binding.linearLayoutContainer.visibility = View.VISIBLE
@@ -104,9 +105,14 @@ class ProfileFragment : Fragment() {
                 launch {
                     authViewModel.state.collect { state ->
                         if (state.isLogout) {
-                            startActivity(Intent(requireContext(), LoginActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            })
+                            startActivity(
+                                Intent(
+                                    requireContext(),
+                                    LoginActivity::class.java
+                                ).apply {
+                                    flags =
+                                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                })
                         }
                     }
                 }
